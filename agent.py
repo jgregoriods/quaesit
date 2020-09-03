@@ -1,16 +1,19 @@
 from math import hypot, sin, asin, cos, radians, degrees
+from abc import ABCMeta, abstractmethod
+from random import randint
 import inspect
 
 
-class Agent:
+class Agent(metaclass=ABCMeta):
     _id = 0
 
-    def __init__(self, world, coords):
+    def __init__(self, world, coords=None):
         self._id = Agent._id
         Agent._id += 1
 
         self.world = world
-        self.coords = coords
+        self.coords = coords or (randint(0, self.world.width - 1),
+                                 randint(0, self.world.height - 1))
         self.direction = 90
 
         self.world.add_agent(self)
@@ -97,8 +100,6 @@ class Agent:
         else:
             self.direction = round((360 + angle) % 360)
 
-
-class Village(Agent):
-    def __init__(self, world, coords, size):
-        super().__init__(world, coords)
-        self.size = size
+    @abstractmethod
+    def step(self):
+        raise NotImplementedError

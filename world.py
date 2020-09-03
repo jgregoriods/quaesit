@@ -1,7 +1,8 @@
 from random import shuffle
+from abc import ABCMeta, abstractmethod
 
 
-class World:
+class World(metaclass=ABCMeta):
     def __init__(self, width, height, torus=True):
         self.width = width
         self.height = height
@@ -9,6 +10,8 @@ class World:
         self.torus = torus
         self.agents = {}
         self.tick = 0
+
+        self.setup()
 
     def init_grid(self, width, height):
         grid = {}
@@ -40,6 +43,10 @@ class World:
     def run(self, n_ticks):
         for i in range(n_ticks):
             self.step()
+
+    @abstractmethod
+    def setup(self):
+        raise NotImplementedError
 
     def step(self):
         agent_ids = list(self.agents.keys())
