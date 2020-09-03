@@ -1,4 +1,5 @@
-from math import hypot, sin, cos, radians
+from math import hypot, sin, asin, cos, radians, degrees
+import inspect
 
 
 class Agent:
@@ -20,7 +21,12 @@ class Agent:
         del self
 
     def hatch(self):
-        return Agent(self.world, self.coords)
+        sig = inspect.signature(self.__init__)
+        filter_keys = [param.name for param in sig.parameters.values()
+                       if param.kind == param.POSITIONAL_OR_KEYWORD]
+        filtered_dict = {filter_key: self.__dict__[filter_key]
+                         for filter_key in filter_keys}
+        return self.__class__(**filtered_dict)
     
     def move_to(self, coords):
         self.world.remove_from_grid(self)
@@ -79,3 +85,20 @@ class Agent:
             self.move_to(self.world.to_torus((x, y)))
         elif (x, y) in self.world.grid:
             self.move_to((x, y))
+
+    def face_towards(self, coords):
+        xdif = coords[0] - self.coords[0]
+        ydif = coords[1] - self.coords[1]
+        dist = hypot(xdif, ydif)
+        angle = degrees(asin(ydif / dist))
+
+        if xdif < 0:
+            self.direction = round(180 - angle)
+        else:
+            self.direction = round((360 + angle) % 360)
+
+
+class Village(Agent):
+    def __init__(self, world, coords, size):
+        super().__init__(world, coords)
+        self.size = size
