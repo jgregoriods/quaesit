@@ -10,14 +10,12 @@ class Sheep(Agent):
         self.breed = 'sheep'
 
     def eat_grass(self):
-        if self.cell_here()['grass']:
+        if self.cell_here()['grass'] == 10:
             self.cell_here()['grass'] = 0
             self.energy += 10
 
     def move(self):
-        self.turn_left(randint(0, 360))
-        self.turn_right(randint(0, 360))
-        self.forward()
+        self.random_walk()
         self.energy -= 1
 
     def reproduce(self):

@@ -7,7 +7,7 @@ import tkinter as tk
 
 
 class GUI:
-    def __init__(self, master, model):
+    def __init__(self, master, model, controls):
         self.master = master
         self.model = model
         self.running = True
@@ -45,22 +45,26 @@ class GUI:
           
         self.model_vars = {}
 
-    def add_slider(self, var_name, min, max, label=None):
-        self.model_vars[var_name] = tk.IntVar()
-        self.new_slider = tk.Scale(self.master, label=label or var_name,
-                                   from_=min, to=max,
-                                   orient=tk.HORIZONTAL,
-                                   variable=self.model_vars[var_name])
-        self.new_slider.grid(row=len(self.model_vars) + 1, column=1)
+        for control in controls:
+            self.model_vars[control] = tk.IntVar()
+            label = controls[control]['label']
+            min, max = controls[control]['range']
+
+            new_slider = tk.Scale(self.master, label=label,
+                                  from_=min, to=max,
+                                  orient=tk.HORIZONTAL,
+                                  variable=self.model_vars[control])
+
+            new_slider.grid(row=len(self.model_vars) + 1, column=1)
 
     def plot_model(self):
         self.ax.cla()
 
         if self.model.display_layer:
             base = np.reshape([self.model.grid[(i, j)][self.model.display_layer]
-                            for j in range(self.model.height)
-                            for i in range(self.model.width)],
-                            (self.model.height, self.model.width))
+                              for j in range(self.model.height)
+                              for i in range(self.model.width)],
+                              (self.model.height, self.model.width))
             
             self.ax.imshow(base)
 

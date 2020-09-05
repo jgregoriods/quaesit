@@ -17,9 +17,7 @@ class Wolf(Agent):
             self.energy += 100
 
     def move(self):
-        self.turn_left(randint(0, 360))
-        self.turn_right(randint(0, 360))
-        self.forward()
+        self.random_walk()
         self.energy -= 1
 
     def reproduce(self):
