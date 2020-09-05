@@ -1,8 +1,8 @@
 import tkinter as tk
 
 from gui import GUI
-from mysim import MySim
+from swm import SWM
 
 root = tk.Tk()
-app = GUI(root, MySim)
+app = GUI(root, SWM)
 root.mainloop()

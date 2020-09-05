@@ -14,8 +14,7 @@ class World(metaclass=ABCMeta):
         self.torus = torus
         self.agents = {}
         self.tick = 0
-
-        self.setup()
+        self.display_layer = None
 
     def init_grid(self, width, height):
         grid = {}
@@ -26,7 +25,7 @@ class World(metaclass=ABCMeta):
         
         return grid
     
-    def add_layer(self, layer_name, file=None, value=0):
+    def add_layer(self, layer_name, file=None, value=0, display=False):
         if file is not None:
             with rio.open(file) as layer:
                 l_arr = layer.read(1)
@@ -41,9 +40,11 @@ class World(metaclass=ABCMeta):
                     self.grid[(i, j)][layer_name] = new_arr[j, i]
 
         else:
-            for i in range(self.width):
-                for j in range(self.height):
-                    self.grid[(i, j)][layer_name] = value
+            for cell in self.grid:
+                    self.grid[cell][layer_name] = value
+        
+        if display:
+            self.display_layer = layer_name
 
     def to_torus(self, coords):
         x, y = coords
@@ -71,5 +72,6 @@ class World(metaclass=ABCMeta):
         agent_ids = list(self.agents.keys())
         shuffle(agent_ids)
         for _id in agent_ids:
-            self.agents[_id].step()
+            if _id in self.agents:
+                self.agents[_id].step()
         self.tick += 1
