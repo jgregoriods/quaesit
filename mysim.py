@@ -7,5 +7,6 @@ class MySim(World):
         super().__init__(width, height, torus)
     
     def setup(self):
-        for i in range(25):
+        for i in range(5):
             v = Village(self)
+        self.add_layer('ele', 'ele.asc')
