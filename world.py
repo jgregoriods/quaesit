@@ -1,5 +1,9 @@
-from random import shuffle
+import numpy as np
+import rasterio as rio
+
 from abc import ABCMeta, abstractmethod
+from random import shuffle
+from scipy.interpolate import interp2d
 
 
 class World(metaclass=ABCMeta):
@@ -18,14 +22,29 @@ class World(metaclass=ABCMeta):
         
         for i in range(width):
             for j in range(height):
-                grid[(i, j)] = {'agents': [],
-                                'color': 'white'}
+                grid[(i, j)] = {'agents': []}
         
         return grid
     
-    def add_layer(self, layer):
-        pass
-    
+    def add_layer(self, layer_name, file=None, value=0):
+        if file is not None:
+            with rio.open(file) as layer:
+                l_arr = layer.read(1)
+
+            height, width = l_arr.shape
+            xrange = lambda x: np.linspace(0, 1, x)
+            f = interp2d(xrange(width), xrange(height), l_arr, kind='linear')
+            new_arr = f(xrange(self.width), xrange(self.height))
+
+            for i in range(self.width):
+                for j in range(self.height):
+                    self.grid[(i, j)][layer_name] = new_arr[j, i]
+
+        else:
+            for i in range(self.width):
+                for j in range(self.height):
+                    self.grid[(i, j)][layer_name] = value
+
     def to_torus(self, coords):
         x, y = coords
         return (x % self.width, y % self.height)
