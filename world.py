@@ -7,7 +7,7 @@ from scipy.interpolate import interp2d
 
 
 class World(metaclass=ABCMeta):
-    def __init__(self, width, height, torus=True):
+    def __init__(self, width, height, torus=True, tracking=None):
         self.width = width
         self.height = height
         self.grid = self.init_grid(width, height)
@@ -15,6 +15,10 @@ class World(metaclass=ABCMeta):
         self.agents = {}
         self.tick = 0
         self.display_layer = None
+        self.tracking = tracking
+
+        if self.tracking:
+            self.track = {param: [] for param in tracking}
 
     def init_grid(self, width, height):
         grid = {}
@@ -64,6 +68,15 @@ class World(metaclass=ABCMeta):
         for i in range(n_ticks):
             self.step()
 
+    def save(self):
+        for param in self.tracking:
+            if self.tracking[param] == 'count':
+                self.track[param].append(len([self.agents[_id] for _id in self.agents
+                                              if self.agents[_id].breed == param]))
+            else:
+                self.track[param].append(sum([getattr(self.agents[_id], self.tracking[param]) for _id in self.agents
+                                              if self.agents[_id].breed == param]))
+
     @abstractmethod
     def setup(self):
         raise NotImplementedError
@@ -74,4 +87,6 @@ class World(metaclass=ABCMeta):
         for _id in agent_ids:
             if _id in self.agents:
                 self.agents[_id].step()
+        if self.tracking:
+            self.save()
         self.tick += 1

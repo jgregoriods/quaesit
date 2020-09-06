@@ -4,8 +4,9 @@ from wolf import Wolf
 
 
 class SWM(World):
-    def __init__(self, n_sheep, n_wolves, width=50, height=50, torus=True):
-        super().__init__(width, height, torus)
+    def __init__(self, n_sheep, n_wolves, width=50, height=50, torus=True,
+                 tracking={'wolf': 'count', 'sheep': 'energy'}):
+        super().__init__(width, height, torus, tracking)
         self.n_sheep = n_sheep
         self.n_wolves = n_wolves
 
@@ -27,4 +28,3 @@ class SWM(World):
     def step(self):
         self.regrow_grass()
         super().step()
-        
