@@ -1,7 +1,8 @@
+import inspect
+
 from math import hypot, sin, asin, cos, radians, degrees
 from abc import ABCMeta, abstractmethod
 from random import randint
-import inspect
 
 
 class Agent(metaclass=ABCMeta):

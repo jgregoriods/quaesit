@@ -4,8 +4,8 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="quaesit-jgregoriods", # Replace with your own username
-    version="0.0.1",
+    name="quaesit",
+    version="0.0.2",
     author="Jonas Gregorio",
     author_email="jonas.gregorio@gmail.com",
     description="Quick and easy simulation tools",
@@ -18,5 +18,5 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    python_requires='>=3.6',
+    python_requires='>=3.8',
 )
