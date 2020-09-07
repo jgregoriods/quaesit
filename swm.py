@@ -4,9 +4,9 @@ from wolf import Wolf
 
 
 class SWM(World):
-    def __init__(self, n_sheep, n_wolves, width=50, height=50, torus=True,
-                 tracking={'wolf': 'count', 'sheep': 'energy'}):
-        super().__init__(width, height, torus, tracking)
+    def __init__(self, n_sheep, n_wolves, width=20, height=20, torus=True, tracking=None):
+                 #tracking={'sheep': ['count', 'energy'], 'wolf': ['count', 'energy']}):
+        super().__init__(width, height, torus)#, tracking)
         self.n_sheep = n_sheep
         self.n_wolves = n_wolves
 

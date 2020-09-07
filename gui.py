@@ -91,21 +91,31 @@ class GUI:
             i = 0
             for plot in self.plot_axes:
                 plot.cla()
-                for param in self.plots[i]:
-                    plot.plot(self.model.track[param])
+                for agent in self.plots[i]:
+                    for param in self.plots[i][agent]:
+                        plot.plot(self.model.track[agent][param])
                 i += 1
 
         self.canvas.draw()
 
     def setup(self):
         params = {k: v.get() for k, v in self.model_vars.items()}
+
+        tracking = None
+        if self.plots:
+            tracking = {}
+            for plot in self.plots:
+                for agent, param in plot.items():
+                    tracking.setdefault(agent, [])
+                    tracking[agent] += param
+        
         self.running = True
         self.stop_button.configure(text='Stop')
 
         if inspect.isclass(self.model):
-            self.model = self.model(**params)
+            self.model = self.model(tracking=tracking, **params)
         else:
-            self.model = self.model.__class__(**params)
+            self.model = self.model.__class__(tracking=tracking, **params)
 
         self.model.setup()
         self.plot_model()

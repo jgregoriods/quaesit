@@ -18,7 +18,8 @@ class World(metaclass=ABCMeta):
         self.tracking = tracking
 
         if self.tracking:
-            self.track = {param: [] for param in tracking}
+            self.track = {agent: {param: [] for param in tracking[agent]}
+                          for agent in tracking}
 
     def init_grid(self, width, height):
         grid = {}
@@ -69,13 +70,14 @@ class World(metaclass=ABCMeta):
             self.step()
 
     def save(self):
-        for param in self.tracking:
-            if self.tracking[param] == 'count':
-                self.track[param].append(len([self.agents[_id] for _id in self.agents
-                                              if self.agents[_id].breed == param]))
-            else:
-                self.track[param].append(sum([getattr(self.agents[_id], self.tracking[param]) for _id in self.agents
-                                              if self.agents[_id].breed == param]))
+        for agent in self.tracking:
+            for param in self.tracking[agent]:
+                if param == 'count':
+                    self.track[agent][param].append(len([self.agents[_id] for _id in self.agents
+                                                         if self.agents[_id].breed == agent]))
+                else:
+                    self.track[agent][param].append(sum([getattr(self.agents[_id], param) for _id in self.agents
+                                                         if self.agents[_id].breed == agent]))
 
     @abstractmethod
     def setup(self):
