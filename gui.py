@@ -5,6 +5,8 @@ import matplotlib.backends.backend_tkagg as tkagg
 import numpy as np
 import tkinter as tk
 
+from math import ceil
+
 
 class GUI:
     def __init__(self, master, model, controls, plots=None):
@@ -14,21 +16,22 @@ class GUI:
         self.plots = plots or []
         self.plot_axes = []
 
-        ncol = 1 + len(self.plots)
+        nrow = ceil((1 + len(self.plots)) / 3)
+        ncol = len(self.plots) + 1 if len(self.plots) < 2 else 3
 
-        self.figure = mplfig.Figure(figsize=(5 * ncol, 5), dpi=150)
-        self.ax = self.figure.add_subplot(1, ncol, 1)
+        self.figure = mplfig.Figure(figsize=(5 * ncol, 5 * nrow), dpi=100)
+        self.ax = self.figure.add_subplot(nrow, ncol, 1)
         self.ax.tick_params(axis='both', which='both', bottom=False,
                             labelbottom=False, left=False, labelleft=False)
 
         if self.plots:
             i = 2
             for plot in self.plots:
-                self.plot_axes.append(self.figure.add_subplot(1, ncol, i))
+                self.plot_axes.append(self.figure.add_subplot(nrow, ncol, i))
                 i += 1
 
         self.figure.subplots_adjust(left=0, bottom=0.02, right=1, top=0.98,
-                                    wspace=0.1, hspace=0)
+                                    wspace=0.1, hspace=0.1)
 
         self.canvas = tkagg.FigureCanvasTkAgg(self.figure, self.master)
         self.canvas.get_tk_widget().grid(row=2, column=2, columnspan=4,

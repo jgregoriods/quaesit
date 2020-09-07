@@ -8,8 +8,8 @@ controls = {
     'n_wolves': {'label': 'Init wolves', 'range': (5, 30)}
 }
 
-#plots = [{'sheep': ['count'], 'wolf': ['count']}]
+plots = [{'sheep': ['count']}, {'sheep': ['count']}, {'sheep': ['count']}]
 
 root = tk.Tk()
-app = GUI(root, SWM, controls=controls)#, plots=plots)
+app = GUI(root, SWM, controls=controls, plots=plots)
 root.mainloop()
