@@ -15,6 +15,8 @@ class Agent(metaclass=ABCMeta):
         self.coords = coords or (randint(0, self.world.width - 1),
                                  randint(0, self.world.height - 1))
         self.direction = 90
+        self.breed = self.__class__.__name__.lower()
+        self.icon = 'o'
 
         self.world.add_agent(self)
 

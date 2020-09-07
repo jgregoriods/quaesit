@@ -4,11 +4,11 @@ from gui import GUI
 from swm import SWM
 
 controls = {
-    'n_sheep': {'label': 'Init sheep', 'range': (1, 50)},
-    'n_wolves': {'label': 'Init wolves', 'range': (5, 30)}
+    'n_sheep': {'label': 'Init sheep', 'range': (1, 100)},
+    'n_wolves': {'label': 'Init wolves', 'range': (5, 100)}
 }
 
-plots = [{'sheep': ['count']}, {'sheep': ['count']}, {'sheep': ['count']}]
+plots = [{'sheep': ['count'], 'wolf': ['count']}]
 
 root = tk.Tk()
 app = GUI(root, SWM, controls=controls, plots=plots)

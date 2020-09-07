@@ -12,6 +12,7 @@ class GUI:
     def __init__(self, master, model, controls, plots=None):
         self.master = master
         self.model = model
+        self.breeds = None
         self.running = True
         self.plots = plots or []
         self.plot_axes = []
@@ -19,7 +20,7 @@ class GUI:
         nrow = ceil((1 + len(self.plots)) / 3)
         ncol = len(self.plots) + 1 if len(self.plots) < 2 else 3
 
-        self.figure = mplfig.Figure(figsize=(5 * ncol, 5 * nrow), dpi=100)
+        self.figure = mplfig.Figure(figsize=(5 * ncol, 5 * nrow), dpi=(150 // nrow))
         self.ax = self.figure.add_subplot(nrow, ncol, 1)
         self.ax.tick_params(axis='both', which='both', bottom=False,
                             labelbottom=False, left=False, labelleft=False)
@@ -34,11 +35,11 @@ class GUI:
                                     wspace=0.1, hspace=0.1)
 
         self.canvas = tkagg.FigureCanvasTkAgg(self.figure, self.master)
-        self.canvas.get_tk_widget().grid(row=2, column=2, columnspan=4,
-                                         rowspan=10)
+        self.canvas.get_tk_widget().grid(row=2, column=2, columnspan=4 * ncol,
+                                         rowspan=10 * nrow)
         
         self.toolbar_frame = tk.Frame(self.master)
-        self.toolbar_frame.grid(row=12, column=2, columnspan=5)
+        self.toolbar_frame.grid(row=10 * nrow + 2, column=2, columnspan=5)
         self.toolbar = tkagg.NavigationToolbar2Tk(self.canvas,
                                                   self.toolbar_frame)
 
@@ -74,6 +75,8 @@ class GUI:
 
     def plot_model(self):
         self.ax.cla()
+        self.ax.set_xlim(0, self.model.width - 1)
+        self.ax.set_ylim(0, self.model.height - 1)
 
         if self.model.display_layer:
             base = np.reshape([self.model.grid[(i, j)][self.model.display_layer]
@@ -81,22 +84,32 @@ class GUI:
                               for i in range(self.model.width)],
                               (self.model.height, self.model.width))
             
-            self.ax.imshow(base)
+            self.ax.imshow(base, cmap='cividis')
 
         if self.model.agents:
-            points = [self.model.agents[_id].coords
-                      for _id in self.model.agents]
-            colors = [self.model.agents[_id].color
-                      for _id in self.model.agents]
-            self.ax.scatter(*zip(*points), c=colors)
+            breeds = {self.model.agents[_id].breed
+                      for _id in self.model.agents}
+            for breed in breeds:
+
+                agents = [self.model.agents[_id] for _id in self.model.agents
+                          if self.model.agents[_id].breed == breed]
+
+                points = [agent.coords for agent in agents]
+                colors = [agent.color for agent in agents]
+
+                self.ax.scatter(*zip(*points), c=colors, s=100, marker=agents[0].icon)
         
         if self.plot_axes:
             i = 0
             for plot in self.plot_axes:
                 plot.cla()
+                labels = []
                 for agent in self.plots[i]:
                     for param in self.plots[i][agent]:
                         plot.plot(self.model.track[agent][param])
+                        labels.append(f'{agent} {param}')
+                plot.legend(tuple(labels), loc='upper right')
+
                 i += 1
 
         self.canvas.draw()
