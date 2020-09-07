@@ -20,7 +20,7 @@ class GUI:
         nrow = ceil((1 + len(self.plots)) / 3)
         ncol = len(self.plots) + 1 if len(self.plots) < 2 else 3
 
-        self.figure = mplfig.Figure(figsize=(5 * ncol, 5 * nrow), dpi=(150 // nrow))
+        self.figure = mplfig.Figure(figsize=(5 * ncol, 5 * nrow), dpi=(75 // nrow))
         self.ax = self.figure.add_subplot(nrow, ncol, 1)
         self.ax.tick_params(axis='both', which='both', bottom=False,
                             labelbottom=False, left=False, labelleft=False)

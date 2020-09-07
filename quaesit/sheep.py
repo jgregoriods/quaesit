@@ -11,7 +11,7 @@ class Sheep(Agent):
         self.icon = get_icon('dog')
 
     def eat_grass(self):
-        if self.cell_here()['grass'] == 10:
+        if self.cell_here()['grass'] == self.world.regrowth_time:
             self.cell_here()['grass'] = 0
             self.energy += 10
 
