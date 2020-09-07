@@ -4,7 +4,7 @@ from wolf import Wolf
 
 
 class SWM(World):
-    def __init__(self, n_sheep, n_wolves, width=25, height=25, torus=True, tracking=None):
+    def __init__(self, n_sheep, n_wolves, width=20, height=20, torus=True, tracking=None):
                  #tracking={'sheep': ['count', 'energy'], 'wolf': ['count', 'energy']}):
         super().__init__(width, height, torus, tracking)
         self.n_sheep = n_sheep

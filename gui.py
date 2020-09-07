@@ -31,7 +31,7 @@ class GUI:
                 self.plot_axes.append(self.figure.add_subplot(nrow, ncol, i))
                 i += 1
 
-        self.figure.subplots_adjust(left=0, bottom=0.02, right=1, top=0.98,
+        self.figure.subplots_adjust(left=0.05, bottom=0.05, right=0.95, top=0.95,
                                     wspace=0.1, hspace=0.1)
 
         self.canvas = tkagg.FigureCanvasTkAgg(self.figure, self.master)

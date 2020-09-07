@@ -8,7 +8,7 @@ class Sheep(Agent):
         super().__init__(world, coords)
         self.color = 'white'
         self.energy = 10
-        self.icon = get_icon('cat')
+        self.icon = get_icon('dog')
 
     def eat_grass(self):
         if self.cell_here()['grass'] == 10:
