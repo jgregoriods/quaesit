@@ -5,6 +5,7 @@ from abc import ABCMeta, abstractmethod
 from random import shuffle
 from scipy.interpolate import interp2d
 from statistics import mean
+from tqdm import tqdm
 
 
 class World(metaclass=ABCMeta):
@@ -19,8 +20,10 @@ class World(metaclass=ABCMeta):
         self.tracking = tracking
 
         if self.tracking:
-            self.track = {agent: {param: [] for param in tracking[agent]}
-                          for agent in tracking}
+            self.track_agents = {agent: {param: [] for param in tracking[agent]}
+                                 for agent in tracking if agent[:5] != 'grid_'}
+            self.track_layers = {layer: {param: [] for param in tracking[layer]}
+                                 for layer in tracking if layer[:5] == 'grid_'}
 
     def init_grid(self, width, height):
         grid = {}
@@ -72,21 +75,63 @@ class World(metaclass=ABCMeta):
 
     def save(self):
         for agent in self.tracking:
-            for param in self.tracking[agent]:
-                if param == 'count':
-                    self.track[agent][param].append(
-                        len([self.agents[_id] for _id in self.agents
-                             if self.agents[_id].breed == agent]))
-                elif param[:4] == 'avg_':
-                    self.track[agent][param].append(
-                        mean([getattr(self.agents[_id], param[4:])
-                              for _id in self.agents
-                              if self.agents[_id].breed == agent]))
-                elif param[:4] == 'sum_':
-                    self.track[agent][param].append(
-                        sum([getattr(self.agents[_id], param[4:])
-                             for _id in self.agents
-                             if self.agents[_id].breed == agent]))
+            if agent[:5] == 'grid_':
+                layer = np.reshape([self.grid[(i, j)][agent[5:]]
+                                    for j in range(self.height)
+                                    for i in range(self.width)],
+                                    (self.height, self.width))
+
+                for param in self.tracking[agent]:
+                    if param[:6] == 'count_':
+                        self.track_layers[agent][param].append(
+                            np.count_nonzero(layer == param[6:]))
+
+                    elif param == 'avg':
+                        self.track_layers[agent][param].append(
+                            np.average(layer))
+
+                    elif param == 'sum':
+                        self.track_layers[agent][param].append(
+                            np.sum(layer))
+                    
+                    elif param == 'min':
+                        self.track_layers[agent][param].append(
+                            np.min(layer))
+
+                    elif param == 'max':
+                        self.track_layers[agent][param].append(
+                            np.max(layer))
+
+            else:
+                for param in self.tracking[agent]:
+                    if param == 'count':
+                        self.track_agents[agent][param].append(
+                            len([self.agents[_id] for _id in self.agents
+                                if self.agents[_id].breed == agent]))
+
+                    elif param[:4] == 'avg_':
+                        self.track_agents[agent][param].append(
+                            mean([getattr(self.agents[_id], param[4:])
+                                for _id in self.agents
+                                if self.agents[_id].breed == agent] or [0]))
+
+                    elif param[:4] == 'sum_':
+                        self.track_agents[agent][param].append(
+                            sum([getattr(self.agents[_id], param[4:])
+                                for _id in self.agents
+                                if self.agents[_id].breed == agent]))
+                    
+                    elif param[:4] == 'min_':
+                        self.track_agents[agent][param].append(
+                            min([getattr(self.agents[_id], param[4:])
+                                for _id in self.agents
+                                if self.agents[_id].breed == agent] or [0]))
+                    
+                    elif param[:4] == 'max_':
+                        self.track_agents[agent][param].append(
+                            max([getattr(self.agents[_id], param[4:])
+                                for _id in self.agents
+                                if self.agents[_id].breed == agent] or [0]))
 
     @abstractmethod
     def setup(self):
@@ -101,3 +146,7 @@ class World(metaclass=ABCMeta):
         if self.tracking:
             self.save()
         self.tick += 1
+
+    def iterate(self, n_steps):
+        for i in tqdm(range(n_steps)):
+            self.step()

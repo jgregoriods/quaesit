@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="quaesit",
-    version="0.0.2",
+    version="0.0.3",
     author="Jonas Gregorio",
     author_email="jonas.gregorio@gmail.com",
     description="Quick and easy simulation tools",

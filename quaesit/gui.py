@@ -9,13 +9,14 @@ from math import ceil
 
 
 class GUI:
-    def __init__(self, master, model, controls, plots=None):
+    def __init__(self, master, model, controls, plots=None, grid_keys=None):
         self.master = master
         self.model = model
         self.breeds = None
         self.running = True
         self.plots = plots or []
         self.plot_axes = []
+        self.grid_keys = grid_keys
 
         nrow = ceil((1 + len(self.plots)) / 3)
         ncol = len(self.plots) + 1 if len(self.plots) < 2 else 3
@@ -36,7 +37,7 @@ class GUI:
                                     top=0.95, wspace=0.1, hspace=0.1)
 
         self.canvas = tkagg.FigureCanvasTkAgg(self.figure, self.master)
-        self.canvas.get_tk_widget().grid(row=2, column=2, columnspan=4 * ncol,
+        self.canvas.get_tk_widget().grid(row=2, column=2, columnspan=6 * ncol,
                                          rowspan=10 * nrow)
         
         self.toolbar_frame = tk.Frame(self.master)
@@ -59,20 +60,36 @@ class GUI:
         self.stop_button = tk.Button(master, text='Stop', width=10,
                                      command=self.stop)
         self.stop_button.grid(row=1, column=5)
+
+        self.n_steps = tk.Entry(master, width=10)
+        self.n_steps.grid(row=1, column=6)
+
+        self.iterate_button = tk.Button(master, text='Iterate', width=10,
+                                        command=self.iterate)
+        self.iterate_button.grid(row=1, column=7)
           
         self.model_vars = {}
 
         for control in controls:
-            self.model_vars[control] = tk.IntVar()
-            label = controls[control]['label']
-            min, max = controls[control]['range']
+            if controls[control]['type'] == 'scale':
+                self.model_vars[control] = tk.IntVar()
+                label = controls[control]['label']
+                min, max = controls[control]['range']
 
-            new_slider = tk.Scale(self.master, label=label,
-                                  from_=min, to=max,
-                                  orient=tk.HORIZONTAL,
-                                  variable=self.model_vars[control])
+                new_slider = tk.Scale(self.master, label=label,
+                                    from_=min, to=max,
+                                    orient=tk.HORIZONTAL,
+                                    variable=self.model_vars[control])
 
-            new_slider.grid(row=len(self.model_vars) + 1, column=1)
+                new_slider.grid(row=len(self.model_vars) + 1, column=1)
+                
+            elif controls[control]['type'] == 'check':
+                self.model_vars[control] = tk.BooleanVar()
+                label = controls[control]['label']
+
+                new_checkbox = tk.Checkbutton(self.master, text=label,
+                                              variable=self.model_vars[control])
+                new_checkbox.grid(row=len(self.model_vars) + 1, column=1)
 
     def plot_model(self):
         self.ax.cla()
@@ -81,10 +98,13 @@ class GUI:
 
         if self.model.display_layer:
             base = np.reshape([self.model.grid[(i, j)][self.model.display_layer]
-                              for j in range(self.model.height)
-                              for i in range(self.model.width)],
+                               for j in range(self.model.height)
+                               for i in range(self.model.width)],
                               (self.model.height, self.model.width))
             
+            if base.dtype.kind == 'U':
+                base = np.vectorize(self.grid_keys.__getitem__)(base)
+
             self.ax.imshow(base, cmap='cividis')
 
         if self.model.agents:
@@ -108,7 +128,10 @@ class GUI:
                 labels = []
                 for agent in self.plots[i]:
                     for param in self.plots[i][agent]:
-                        plot.plot(self.model.track[agent][param])
+                        if agent[:5] == 'grid_':
+                            plot.plot(self.model.track_layers[agent][param])
+                        else:
+                            plot.plot(self.model.track_agents[agent][param])
                         labels.append(f'{agent} {param}')
                 plot.legend(tuple(labels), loc='upper right')
 
@@ -156,3 +179,7 @@ class GUI:
             self.running = True
             self.stop_button.configure(text='Stop')
             self.run()
+
+    def iterate(self):
+        self.model.iterate(int(self.n_steps.get()))
+        self.plot_model()
