@@ -83,8 +83,11 @@ class World(metaclass=ABCMeta):
 
                 for param in self.tracking[agent]:
                     if param[:6] == 'count_':
+                        val = param[6:]
+                        if val.isdigit():
+                            val = int(val)
                         self.track_layers[agent][param].append(
-                            np.count_nonzero(layer == param[6:]))
+                            np.count_nonzero(layer == val))
 
                     elif param == 'avg':
                         self.track_layers[agent][param].append(
