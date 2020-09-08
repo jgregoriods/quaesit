@@ -80,6 +80,7 @@ class GUI:
                                     from_=min, to=max,
                                     orient=tk.HORIZONTAL,
                                     variable=self.model_vars[control])
+                new_slider.set(controls[control]['value'])
 
                 new_slider.grid(row=len(self.model_vars) + 1, column=1)
                 
