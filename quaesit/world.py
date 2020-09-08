@@ -4,6 +4,7 @@ import rasterio as rio
 from abc import ABCMeta, abstractmethod
 from random import shuffle
 from scipy.interpolate import interp2d
+from statistics import mean
 
 
 class World(metaclass=ABCMeta):
@@ -73,11 +74,19 @@ class World(metaclass=ABCMeta):
         for agent in self.tracking:
             for param in self.tracking[agent]:
                 if param == 'count':
-                    self.track[agent][param].append(len([self.agents[_id] for _id in self.agents
-                                                         if self.agents[_id].breed == agent]))
-                else:
-                    self.track[agent][param].append(sum([getattr(self.agents[_id], param) for _id in self.agents
-                                                         if self.agents[_id].breed == agent]))
+                    self.track[agent][param].append(
+                        len([self.agents[_id] for _id in self.agents
+                             if self.agents[_id].breed == agent]))
+                elif param[:4] == 'avg_':
+                    self.track[agent][param].append(
+                        mean([getattr(self.agents[_id], param[4:])
+                              for _id in self.agents
+                              if self.agents[_id].breed == agent]))
+                elif param[:4] == 'sum_':
+                    self.track[agent][param].append(
+                        sum([getattr(self.agents[_id], param[4:])
+                             for _id in self.agents
+                             if self.agents[_id].breed == agent]))
 
     @abstractmethod
     def setup(self):

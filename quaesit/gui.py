@@ -20,7 +20,8 @@ class GUI:
         nrow = ceil((1 + len(self.plots)) / 3)
         ncol = len(self.plots) + 1 if len(self.plots) < 2 else 3
 
-        self.figure = mplfig.Figure(figsize=(5 * ncol, 5 * nrow), dpi=(75 // nrow))
+        self.figure = mplfig.Figure(figsize=(5 * ncol, 5 * nrow),
+                                    dpi=(75 // nrow))
         self.ax = self.figure.add_subplot(nrow, ncol, 1)
         self.ax.tick_params(axis='both', which='both', bottom=False,
                             labelbottom=False, left=False, labelleft=False)
@@ -31,8 +32,8 @@ class GUI:
                 self.plot_axes.append(self.figure.add_subplot(nrow, ncol, i))
                 i += 1
 
-        self.figure.subplots_adjust(left=0.05, bottom=0.05, right=0.95, top=0.95,
-                                    wspace=0.1, hspace=0.1)
+        self.figure.subplots_adjust(left=0.05, bottom=0.05, right=0.95,
+                                    top=0.95, wspace=0.1, hspace=0.1)
 
         self.canvas = tkagg.FigureCanvasTkAgg(self.figure, self.master)
         self.canvas.get_tk_widget().grid(row=2, column=2, columnspan=4 * ncol,
@@ -97,7 +98,8 @@ class GUI:
                 points = [agent.coords for agent in agents]
                 colors = [agent.color for agent in agents]
 
-                self.ax.scatter(*zip(*points), c=colors, s=100, marker=agents[0].icon)
+                self.ax.scatter(*zip(*points), c=colors, s=100,
+                                marker=agents[0].icon)
         
         if self.plot_axes:
             i = 0
