@@ -133,14 +133,14 @@ class GUI:
             for plot in self.plot_axes:
                 plot.cla()
                 labels = []
-                for agent in self.plots[i]:
-                    for param in self.plots[i][agent]:
-                        if agent[:5] == 'grid_':
+                for agent in self.plots[i]['data']:
+                    for param in self.plots[i]['data'][agent]:
+                        if self.plots[i]['type'] == 'line':
                             plot.plot(self.model.track[agent][param])
-                        elif agent == 'global':
-                            plot.plot(self.model.track['global'][param])
-                        else:
-                            plot.plot(self.model.track[agent][param])
+                        elif (self.plots[i]['type'] == 'hist' and
+                              self.model.track[agent][param]):
+                            plot.hist(self.model.track[agent][param][len(self.model.track[agent][param])
+                                                                    - 1])
                         labels.append(f'{agent} {param}')
                 plot.legend(tuple(labels), loc='upper right')
 
@@ -155,7 +155,7 @@ class GUI:
         if self.plots:
             tracking = {}
             for plot in self.plots:
-                for agent, param in plot.items():
+                for agent, param in plot['data'].items():
                     tracking.setdefault(agent, [])
                     tracking[agent] += param
 
