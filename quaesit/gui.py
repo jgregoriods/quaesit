@@ -40,7 +40,7 @@ class GUI:
         self.canvas = tkagg.FigureCanvasTkAgg(self.figure, self.master)
         self.canvas.get_tk_widget().grid(row=2, column=2, columnspan=6 * ncol,
                                          rowspan=10 * nrow)
-        
+
         self.toolbar_frame = tk.Frame(self.master)
         self.toolbar_frame.grid(row=10 * nrow + 2, column=2, columnspan=5)
         self.toolbar = tkagg.NavigationToolbar2Tk(self.canvas,
@@ -68,7 +68,7 @@ class GUI:
         self.iterate_button = tk.Button(master, text='Iterate', width=10,
                                         command=self.iterate)
         self.iterate_button.grid(row=1, column=7)
-          
+
         self.model_vars = {}
 
         for control in controls:
@@ -78,13 +78,13 @@ class GUI:
                 min, max = controls[control]['range']
 
                 new_slider = tk.Scale(self.master, label=label,
-                                    from_=min, to=max,
-                                    orient=tk.HORIZONTAL,
-                                    variable=self.model_vars[control])
+                                      from_=min, to=max,
+                                      orient=tk.HORIZONTAL,
+                                      variable=self.model_vars[control])
                 new_slider.set(controls[control]['value'])
 
                 new_slider.grid(row=len(self.model_vars) + 1, column=1)
-                
+
             elif controls[control]['type'] == 'check':
                 self.model_vars[control] = tk.BooleanVar()
                 label = controls[control]['label']
@@ -103,7 +103,7 @@ class GUI:
                                for j in range(self.model.height)
                                for i in range(self.model.width)],
                               (self.model.height, self.model.width))
-            
+
             if base.dtype.kind == 'U':
                 base = np.vectorize(self.grid_keys.__getitem__)(base)
 
@@ -122,7 +122,7 @@ class GUI:
 
                 self.ax.scatter(*zip(*points), c=colors, s=100,
                                 marker=agents[0].icon)
-        
+
         if self.plot_axes:
             i = 0
             for plot in self.plot_axes:
@@ -153,7 +153,7 @@ class GUI:
                 for agent, param in plot.items():
                     tracking.setdefault(agent, [])
                     tracking[agent] += param
-        
+
         self.running = True
         self.stop_button.configure(text='Stop')
 
@@ -164,11 +164,11 @@ class GUI:
 
         self.model.setup()
         self.plot_model()
-    
+
     def step(self):
         self.model.step()
         self.plot_model()
-    
+
     def run(self):
         if self.running:
             self.model.step()
