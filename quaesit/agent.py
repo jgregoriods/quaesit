@@ -140,7 +140,6 @@ class Agent(metaclass=ABCMeta):
                 self.direction = round((360 + angle) % 360)
 
     def random_walk(self):
-        self.turn_left(randint(0, 360))
         self.turn_right(randint(0, 360))
         self.forward()
 

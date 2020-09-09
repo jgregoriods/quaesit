@@ -9,6 +9,11 @@ from typing import Dict, List
 
 
 class GUI:
+    """
+    Class for a simple graphical-user interface for an agent-based
+    model.
+    """
+
     def __init__(self, master, model, controls: Dict, plots: List = None,
                  grid_keys: Dict = None):
         self.master = master
