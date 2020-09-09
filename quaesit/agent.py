@@ -3,12 +3,13 @@ import inspect
 from math import hypot, sin, asin, cos, radians, degrees
 from abc import ABCMeta, abstractmethod
 from random import randint
+from typing import Dict, List, Tuple
 
 
 class Agent(metaclass=ABCMeta):
     _id = 0
 
-    def __init__(self, world, coords=None):
+    def __init__(self, world: 'World', coords: Tuple = None):
         self._id = Agent._id
         Agent._id += 1
 
@@ -34,19 +35,19 @@ class Agent(metaclass=ABCMeta):
                          for filter_key in filter_keys}
         return self.__class__(**filtered_dict)
     
-    def move_to(self, coords):
+    def move_to(self, coords: Tuple):
         self.world.remove_from_grid(self)
         self.coords = coords
         self.world.place_on_grid(self)
 
-    def cell_here(self):
+    def cell_here(self) -> Dict:
         return self.world.grid[self.coords]
     
-    def get_distance(self, coords):
+    def get_distance(self, coords: Tuple) -> int:
         x, y = coords
         return round(hypot((x - self.coords[0]), (y - self.coords[1])))
 
-    def cells_in_radius(self, radius):
+    def cells_in_radius(self, radius: int) -> Dict:
         if self.world.torus:
             neighborhood = {self.world.to_torus((x, y)):
                             self.world.grid[self.world.to_torus((x, y))]
@@ -66,24 +67,24 @@ class Agent(metaclass=ABCMeta):
 
         return neighborhood
     
-    def agents_in_radius(self, radius):
+    def agents_in_radius(self, radius: int):
         neighborhood = self.cells_in_radius(radius)
         neighbors = [agent for coords in neighborhood
                      for agent in self.world.grid[coords]['agents']
                      if agent is not self]
         return neighbors
 
-    def agents_here(self):
+    def agents_here(self) -> List:
         return [agent for agent in self.world.grid[self.coords]['agents']
                 if agent is not self]
 
-    def turn_right(self, angle=90):
+    def turn_right(self, angle: int = 90):
         self.direction = round((self.direction - angle) % 360)
     
-    def turn_left(self, angle=90):
+    def turn_left(self, angle: int = 90):
         self.direction = round((self.direction + angle) % 360)
     
-    def forward(self, n_steps=1):
+    def forward(self, n_steps: int = 1):
         x = round(self.coords[0] + cos(radians(self.direction)) * n_steps)
         y = round(self.coords[1] + sin(radians(self.direction)) * n_steps)
     
@@ -92,7 +93,7 @@ class Agent(metaclass=ABCMeta):
         elif (x, y) in self.world.grid:
             self.move_to((x, y))
 
-    def face_towards(self, coords):
+    def face_towards(self, coords: Tuple):
         xdif = coords[0] - self.coords[0]
         ydif = coords[1] - self.coords[1]
         dist = hypot(xdif, ydif)

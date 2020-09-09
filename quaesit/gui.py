@@ -1,15 +1,16 @@
 import inspect
-import matplotlib.pyplot as plt
+import tkinter as tk
 import matplotlib.figure as mplfig
 import matplotlib.backends.backend_tkagg as tkagg
 import numpy as np
-import tkinter as tk
 
 from math import ceil
+from typing import Dict, List
 
 
 class GUI:
-    def __init__(self, master, model, controls, plots=None, grid_keys=None):
+    def __init__(self, master, model, controls: Dict, plots: List = None,
+                 grid_keys: Dict = None):
         self.master = master
         self.model = model
         self.breeds = None
@@ -130,11 +131,11 @@ class GUI:
                 for agent in self.plots[i]:
                     for param in self.plots[i][agent]:
                         if agent[:5] == 'grid_':
-                            plot.plot(self.model.track_layers[agent][param])
+                            plot.plot(self.model.track[agent][param])
                         elif agent == 'global':
-                            plot.plot(self.model.track_globals['global'][param])
+                            plot.plot(self.model.track['global'][param])
                         else:
-                            plot.plot(self.model.track_agents[agent][param])
+                            plot.plot(self.model.track[agent][param])
                         labels.append(f'{agent} {param}')
                 plot.legend(tuple(labels), loc='upper right')
 

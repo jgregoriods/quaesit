@@ -23,16 +23,10 @@ class World(metaclass=ABCMeta):
         self.globals = {}
 
         if self.tracking:
-            self.track_agents = {agent: {param: [] for param in tracking[agent]}
-                                 for agent in tracking if agent[:5] != 'grid_'
-                                 and agent != 'global'}
-            self.track_layers = {layer: {param: [] for param in tracking[layer]}
-                                 for layer in tracking if layer[:5] == 'grid_'}
-            self.track_globals = {glb: {param: [] for param in tracking[glb]}
-                                  for glb in tracking if glb == 'global'}
+            self.track = {agent: {param: [] for param in tracking[agent]}
+                          for agent in tracking}
 
-
-    def init_grid(self):
+    def init_grid(self) -> Dict:
         grid = {}
         
         for i in range(self.width):
@@ -63,7 +57,7 @@ class World(metaclass=ABCMeta):
         if display:
             self.display_layer = layer_name
 
-    def to_torus(self, coords: Tuple):
+    def to_torus(self, coords: Tuple) -> Tuple:
         x, y = coords
         return (x % self.width, y % self.height)
 
@@ -85,10 +79,10 @@ class World(metaclass=ABCMeta):
         for agent in self.tracking:
             if agent == 'global':
                 for param in self.tracking[agent]:
-                    self.track_globals['global'][param].append(
+                    self.track['global'][param].append(
                         self.globals[param])
 
-            if agent[:5] == 'grid_':
+            elif agent[:5] == 'grid_':
                 layer = np.reshape([self.grid[(i, j)][agent[5:]]
                                     for j in range(self.height)
                                     for i in range(self.width)],
@@ -99,52 +93,52 @@ class World(metaclass=ABCMeta):
                         val = param[6:]
                         if val.isdigit():
                             val = int(val)
-                        self.track_layers[agent][param].append(
+                        self.track[agent][param].append(
                             np.count_nonzero(layer == val))
 
                     elif param == 'avg':
-                        self.track_layers[agent][param].append(
+                        self.track[agent][param].append(
                             np.average(layer))
 
                     elif param == 'sum':
-                        self.track_layers[agent][param].append(
+                        self.track[agent][param].append(
                             np.sum(layer))
                     
                     elif param == 'min':
-                        self.track_layers[agent][param].append(
+                        self.track[agent][param].append(
                             np.min(layer))
 
                     elif param == 'max':
-                        self.track_layers[agent][param].append(
+                        self.track[agent][param].append(
                             np.max(layer))
 
             else:
                 for param in self.tracking[agent]:
                     if param == 'count':
-                        self.track_agents[agent][param].append(
+                        self.track[agent][param].append(
                             len([self.agents[_id] for _id in self.agents
                                 if self.agents[_id].breed == agent]))
 
                     elif param[:4] == 'avg_':
-                        self.track_agents[agent][param].append(
+                        self.track[agent][param].append(
                             mean([getattr(self.agents[_id], param[4:])
                                 for _id in self.agents
                                 if self.agents[_id].breed == agent] or [0]))
 
                     elif param[:4] == 'sum_':
-                        self.track_agents[agent][param].append(
+                        self.track[agent][param].append(
                             sum([getattr(self.agents[_id], param[4:])
                                 for _id in self.agents
                                 if self.agents[_id].breed == agent]))
                     
                     elif param[:4] == 'min_':
-                        self.track_agents[agent][param].append(
+                        self.track[agent][param].append(
                             min([getattr(self.agents[_id], param[4:])
                                 for _id in self.agents
                                 if self.agents[_id].breed == agent] or [0]))
                     
                     elif param[:4] == 'max_':
-                        self.track_agents[agent][param].append(
+                        self.track[agent][param].append(
                             max([getattr(self.agents[_id], param[4:])
                                 for _id in self.agents
                                 if self.agents[_id].breed == agent] or [0]))
