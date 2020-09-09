@@ -131,6 +131,8 @@ class GUI:
                     for param in self.plots[i][agent]:
                         if agent[:5] == 'grid_':
                             plot.plot(self.model.track_layers[agent][param])
+                        elif agent == 'global':
+                            plot.plot(self.model.track_globals['global'][param])
                         else:
                             plot.plot(self.model.track_agents[agent][param])
                         labels.append(f'{agent} {param}')

@@ -6,35 +6,43 @@ from random import shuffle
 from scipy.interpolate import interp2d
 from statistics import mean
 from tqdm import tqdm
+from typing import Dict, Tuple
 
 
 class World(metaclass=ABCMeta):
-    def __init__(self, width, height, torus=True, tracking=None):
+    def __init__(self, width: int, height: int, torus: bool = True,
+                 tracking: Dict = None):
         self.width = width
         self.height = height
-        self.grid = self.init_grid(width, height)
+        self.grid = self.init_grid()
         self.torus = torus
         self.agents = {}
         self.tick = 0
         self.display_layer = None
         self.tracking = tracking
+        self.globals = {}
 
         if self.tracking:
             self.track_agents = {agent: {param: [] for param in tracking[agent]}
-                                 for agent in tracking if agent[:5] != 'grid_'}
+                                 for agent in tracking if agent[:5] != 'grid_'
+                                 and agent != 'global'}
             self.track_layers = {layer: {param: [] for param in tracking[layer]}
                                  for layer in tracking if layer[:5] == 'grid_'}
+            self.track_globals = {glb: {param: [] for param in tracking[glb]}
+                                  for glb in tracking if glb == 'global'}
 
-    def init_grid(self, width, height):
+
+    def init_grid(self):
         grid = {}
         
-        for i in range(width):
-            for j in range(height):
+        for i in range(self.width):
+            for j in range(self.height):
                 grid[(i, j)] = {'agents': []}
         
         return grid
     
-    def add_layer(self, layer_name, file=None, value=0, display=False):
+    def add_layer(self, layer_name: str, file: str = None, value: int = 0,
+                  display: bool = False):
         if file is not None:
             with rio.open(file) as layer:
                 l_arr = layer.read(1)
@@ -55,26 +63,31 @@ class World(metaclass=ABCMeta):
         if display:
             self.display_layer = layer_name
 
-    def to_torus(self, coords):
+    def to_torus(self, coords: Tuple):
         x, y = coords
         return (x % self.width, y % self.height)
 
-    def add_agent(self, agent):
+    def add_agent(self, agent: 'Agent'):
         self.agents[agent._id] = agent
         self.place_on_grid(agent)
 
-    def remove_from_grid(self, agent):
+    def remove_from_grid(self, agent: 'Agent'):
         self.grid[agent.coords]['agents'].remove(agent)
     
-    def place_on_grid(self, agent):
+    def place_on_grid(self, agent: 'Agent'):
         self.grid[agent.coords]['agents'].append(agent)
 
-    def run(self, n_ticks):
+    def run(self, n_ticks: int):
         for i in range(n_ticks):
             self.step()
 
     def save(self):
         for agent in self.tracking:
+            if agent == 'global':
+                for param in self.tracking[agent]:
+                    self.track_globals['global'][param].append(
+                        self.globals[param])
+
             if agent[:5] == 'grid_':
                 layer = np.reshape([self.grid[(i, j)][agent[5:]]
                                     for j in range(self.height)
@@ -150,6 +163,6 @@ class World(metaclass=ABCMeta):
             self.save()
         self.tick += 1
 
-    def iterate(self, n_steps):
+    def iterate(self, n_steps: int):
         for i in tqdm(range(n_steps)):
             self.step()
