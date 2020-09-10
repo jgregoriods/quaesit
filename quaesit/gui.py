@@ -94,9 +94,9 @@ class GUI:
                 self.model_vars[control] = tk.BooleanVar()
                 label = controls[control]['label']
 
-                new_checkbox = tk.Checkbutton(self.master, text=label,
-                                              variable=self.model_vars[control])
-                new_checkbox.grid(row=len(self.model_vars) + 1, column=1)
+                new_check = tk.Checkbutton(self.master, text=label,
+                                           variable=self.model_vars[control])
+                new_check.grid(row=len(self.model_vars) + 1, column=1)
 
     def plot_model(self):
         self.ax.cla()
@@ -104,7 +104,8 @@ class GUI:
         self.ax.set_ylim(0, self.model.height - 1)
 
         if self.model.display_layer:
-            base = np.reshape([self.model.grid[(i, j)][self.model.display_layer]
+            base = np.reshape([self.model.grid[(i, j)]
+                                              [self.model.display_layer]
                                for j in range(self.model.height)
                                for i in range(self.model.width)],
                               (self.model.height, self.model.width))
@@ -139,8 +140,7 @@ class GUI:
                             plot.plot(self.model.track[agent][param])
                         elif (self.plots[i]['type'] == 'hist' and
                               self.model.track[agent][param]):
-                            plot.hist(self.model.track[agent][param][len(self.model.track[agent][param])
-                                                                    - 1])
+                            plot.hist(self.model.track[agent][param][-1])
                         labels.append(f'{agent} {param}')
                 plot.legend(tuple(labels), loc='upper right')
 
