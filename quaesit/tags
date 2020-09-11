@@ -17,7 +17,7 @@ move_to	/home/jgregoriods/quaesit/quaesit/agent.py	/^    def move_to(self, coord
 nearest_agent	/home/jgregoriods/quaesit/quaesit/agent.py	/^    def nearest_agent(self, agents: List = None):$/;"	m	language:Python	class:Agent
 nearest_cell	/home/jgregoriods/quaesit/quaesit/agent.py	/^    def nearest_cell(self, cells: Union[List, Dict]) -> Tuple:$/;"	m	language:Python	class:Agent
 plot_model	/home/jgregoriods/quaesit/quaesit/gui.py	/^    def plot_model(self):$/;"	m	language:Python	class:GUI
-random_walk	/home/jgregoriods/quaesit/quaesit/agent.py	/^    def random_walk(self):$/;"	m	language:Python	class:Agent
+random_walk	/home/jgregoriods/quaesit/quaesit/agent.py	/^    def random_walk(self, n_steps: int = 1):$/;"	m	language:Python	class:Agent
 run	/home/jgregoriods/quaesit/quaesit/gui.py	/^    def run(self):$/;"	m	language:Python	class:GUI
 setup	/home/jgregoriods/quaesit/quaesit/gui.py	/^    def setup(self):$/;"	m	language:Python	class:GUI
 step	/home/jgregoriods/quaesit/quaesit/agent.py	/^    def step(self):$/;"	m	language:Python	class:Agent

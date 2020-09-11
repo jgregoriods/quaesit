@@ -15,7 +15,7 @@ class GUI:
     """
 
     def __init__(self, master, model, controls: Dict, plots: List = None,
-                 grid_keys: Dict = None):
+                 grid_keys: Dict = None, grid_color = 'viridis'):
         self.master = master
         self.model = model
         self.breeds = None
@@ -23,6 +23,7 @@ class GUI:
         self.plots = plots or []
         self.plot_axes = []
         self.grid_keys = grid_keys
+        self.grid_color = grid_color
 
         nrow = ceil((1 + len(self.plots)) / 3)
         ncol = len(self.plots) + 1 if len(self.plots) < 2 else 3
@@ -113,7 +114,7 @@ class GUI:
             if base.dtype.kind == 'U':
                 base = np.vectorize(self.grid_keys.__getitem__)(base)
 
-            self.ax.imshow(base, cmap='cividis')
+            self.ax.imshow(base, cmap=self.grid_color)
 
         if self.model.agents:
             breeds = {self.model.agents[_id].breed

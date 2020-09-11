@@ -23,7 +23,7 @@ class Agent(metaclass=ABCMeta):
                                  randint(0, self.world.height - 1))
         self.direction = 90
         self.breed = self.__class__.__name__.lower()
-        self.icon = 'o'
+        self.icon = '.'
 
         self.world.add_agent(self)
 
@@ -211,13 +211,15 @@ class Agent(metaclass=ABCMeta):
             else:
                 self.direction = round((360 + angle) % 360)
 
-    def random_walk(self):
+    def random_walk(self, n_steps: int = 1):
         """
-        Moves the agent one cell in a random direction.
+        Moves the agent one cell forward in a random direction for a
+        number of times.
         """
 
-        self.turn_right(randint(0, 360))
-        self.forward()
+        for i in range(n_steps):
+            self.turn_right(randint(0, 360))
+            self.forward()
 
     @abstractmethod
     def step(self):
