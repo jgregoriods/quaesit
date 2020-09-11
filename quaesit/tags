@@ -4,7 +4,7 @@ agents_here	/home/jgregoriods/quaesit/quaesit/agent.py	/^    def agents_here(sel
 agents_in_radius	/home/jgregoriods/quaesit/quaesit/agent.py	/^    def agents_in_radius(self, radius: int):$/;"	m	language:Python	class:Agent
 cells_in_radius	/home/jgregoriods/quaesit/quaesit/agent.py	/^    def cells_in_radius(self, radius: int) -> Dict:$/;"	m	language:Python	class:Agent
 cell_here	/home/jgregoriods/quaesit/quaesit/agent.py	/^    def cell_here(self) -> Dict:$/;"	m	language:Python	class:Agent
-color	/home/jgregoriods/quaesit/quaesit/agent.py	/^    color = 'black'$/;"	v	language:Python	class:Agent
+colors	/home/jgregoriods/quaesit/quaesit/agent.py	/^    colors = ['blue', 'brown', 'cyan', 'gray', 'green', 'magenta', 'orange',$/;"	v	language:Python	class:Agent
 die	/home/jgregoriods/quaesit/quaesit/agent.py	/^    def die(self):$/;"	m	language:Python	class:Agent
 empty_cells_in_radius	/home/jgregoriods/quaesit/quaesit/agent.py	/^    def empty_cells_in_radius(self, radius: int) -> Dict:$/;"	m	language:Python	class:Agent
 face_towards	/home/jgregoriods/quaesit/quaesit/agent.py	/^    def face_towards(self, coords: Tuple):$/;"	m	language:Python	class:Agent

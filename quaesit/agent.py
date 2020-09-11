@@ -2,7 +2,7 @@ import inspect
 
 from math import hypot, sin, asin, cos, radians, degrees
 from abc import ABCMeta, abstractmethod
-from random import randint
+from random import randint, choice
 from typing import Dict, List, Tuple, Union
 
 
@@ -12,7 +12,8 @@ class Agent(metaclass=ABCMeta):
     """
 
     _id = 0
-    color = 'black'
+    colors = ['blue', 'brown', 'cyan', 'gray', 'green', 'magenta', 'orange',
+              'pink', 'purple', 'red', 'yellow']
 
     def __init__(self, world, coords: Tuple = None):
         self._id = Agent._id
@@ -24,6 +25,7 @@ class Agent(metaclass=ABCMeta):
         self.direction = 90
         self.breed = self.__class__.__name__.lower()
         self.icon = '.'
+        self.color = choice(self.colors)
 
         self.world.add_agent(self)
 

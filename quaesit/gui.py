@@ -46,6 +46,7 @@ class GUI:
         self.canvas = tkagg.FigureCanvasTkAgg(self.figure, self.master)
         self.canvas.get_tk_widget().grid(row=2, column=2, columnspan=6 * ncol,
                                          rowspan=10 * nrow)
+        self.canvas.mpl_connect('button_press_event', self.on_click)
 
         self.toolbar_frame = tk.Frame(self.master)
         self.toolbar_frame.grid(row=10 * nrow + 2, column=2, columnspan=5)
@@ -114,7 +115,13 @@ class GUI:
             if base.dtype.kind == 'U':
                 base = np.vectorize(self.grid_keys.__getitem__)(base)
 
-            self.ax.imshow(base, cmap=self.grid_color)
+            # To avoid showing the grid with color for lowest values at setup
+            # if the grid is uniform.
+            base_min = np.min(base)
+            if base_min == np.max(base):
+                base_min -= 1
+
+            self.ax.imshow(base, cmap=self.grid_color, vmin=base_min)
 
         if self.model.agents:
             breeds = {self.model.agents[_id].breed
@@ -193,3 +200,15 @@ class GUI:
     def iterate(self):
         self.model.iterate(int(self.n_steps.get()))
         self.plot_model()
+
+    def on_click(self, event):
+        if event.inaxes is not None:
+            x, y = round(event.xdata), round(event.ydata)
+            print('\n')
+            print(f'Cell {x} {y}')
+            print(self.model.grid[(x, y)])
+            print('Agents: ')
+            for agent in self.model.grid[(x, y)]['agents']:
+                print(f'{agent.breed} {agent._id}')
+                for prop, val in vars(agent).items():
+                    print(f'{prop}: {val}')
