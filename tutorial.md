@@ -78,7 +78,7 @@ tutorial
 └── app.py
 ```
 Every world must have a <code>setup()</code> method, which calls all actions to be performed before the model starts to run. In our case, we will create a number of turtles equal to <code>self.population</code> and initialize a layer in the grid with food for the agents.
-```
+```python
   def setup(self):
     for i in range(self.population):
       new_turtle = Turtle(world=self, energy=randint(1, 10))
@@ -86,3 +86,12 @@ Every world must have a <code>setup()</code> method, which calls all actions to 
     self.add_layer('food', value=1, display=True)
 ```
 When each Turtle object is created, we are passing it <code>self</code>, i.e., the World object as one of the arguments (see above). We also give each turtle a random energy value to start with - between 1 and 10.
+Every world is initialized with a grid whose dimensions are defined by the width and height arguments. The grid is structured as a dictionary where tuples of x,y coordinates are the keys and the values are, on their turn, dictionaries with each layer name as a key. Minimally, the grid is initialized with a layer called "agents" where the agent objects occupying each cell are stored in a list. If we inspected a given cell at this stage, we would see something like <code>{(0, 0): {'agents: []}}</code>. The method <code>add_layer()</code> facilitates adding extra layers to the model. In our case, we specify the layer's name as "food" and initialize every cell with a value of 1. If <code>display=True</code>, this is the layer that will be drawn in the GUI when we visualize the model.
+Besides uniform values, the <code>add_layer()</code> method also accepts raster files and numpy arrays to initialize a layer. They must be specified the arguments <code>file</code> and <code>object</code>, respectively. If the file or array provided does not fit the number of cells specified in the model's width and height, they will be resampled.
+Now that we understand how the grid works, we can go back to the turtle's <code>eat()</code> method.
+```python
+  def eat(self):
+    if self.cell_here('food'):
+      self.energy += 10
+      self.world.grid[self.coords]['food'] = 0
+```
