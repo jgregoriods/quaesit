@@ -17,6 +17,7 @@ class GUI:
     def __init__(self, master, model, controls: Dict, plots: List = None,
                  grid_keys: Dict = None, grid_color = 'viridis'):
         self.master = master
+        master.title = model.__name__
         self.model = model
         self.breeds = None
         self.running = True

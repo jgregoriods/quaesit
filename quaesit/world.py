@@ -14,8 +14,8 @@ class World(metaclass=ABCMeta):
     Class to represent the environment or world in an agent-based model.
     """
 
-    def __init__(self, width: int, height: int, torus: bool = True,
-                 tracking: Dict = None):
+    def __init__(self, width: int, height: int, tracking: Dict = None,
+                 torus: bool = True):
         self.width = width
         self.height = height
         self.grid = self.init_grid()

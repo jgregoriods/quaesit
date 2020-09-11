@@ -60,12 +60,16 @@ class Agent(metaclass=ABCMeta):
         self.coords = coords
         self.world.place_on_grid(self)
 
-    def cell_here(self) -> Dict:
+    def cell_here(self, layer = None):
         """
-        Returns all attributes of the grid cell where the agent is.
+        Returns the value of a layer in the model's grid for the cell
+        where the agent is. If no layer is specified, the values of all
+        layers are returned.
         """
-
-        return self.world.grid[self.coords]
+        if layer is not None:
+            return self.world.grid[self.coords][layer]
+        else:
+            return self.world.grid[self.coords]
 
     def get_distance(self, coords: Tuple) -> int:
         """
