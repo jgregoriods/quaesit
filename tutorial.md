@@ -48,7 +48,7 @@ In our case, let's make the agents move randomly, eat food (if there is any avai
 ```
 We will go back to the <code>eat()</code> method later, after understanding how the grid system works.
 The code above should be self-explanatory. The Agent class has in-built methods for moving and turning. They are <code>turn_right()</code>, <code>turn_left()</code> and <code>forward()</code>. The <code>random_walk()</code> method combines them, making the agent move a step in a random direction. Our turtles also loose one unit of energy every time they move.
-For reproducing, the turtle first checks whether it has surplus energy. If so, an agent is created and initialized with the same parameters as the "parent". The Agent method <code>hatch()</code> does just that.
+For reproducing, the turtle first checks whether it has surplus energy. If so, an agent is created and initialized with the same parameters as the "parent". The Agent method <code>hatch()</code> does just that. Before calling it, the turtle splits its energy in half, so that the "child" gets half the parent's energy.
 When the turtles are out of energy, they die by calling the Agent <code>die()</code> method, which deletes the object and references to it in the model.
 
 ## Creating the World
@@ -95,3 +95,19 @@ Now that we understand how the grid works, we can go back to the turtle's <code>
       self.energy += 10
       self.world.grid[self.coords]['food'] = 0
 ```
+The <code>cell_here()</code> method returns, as a dictionary, the values of every layer at the cell where the agent is currently located. If a layer is specified - as, in our case, "food" - only the value of that layer is returned. If food is available, the turtle's energy is increased by 10 and the cell's "food" is reduced to zero.
+Now, let's finish the Tutorial class. When the food in all cells gets eaten, the agents will eventually die of starvation. Let's create a function to regrow food with a 5% probability for every cell:
+```python
+  def regrow_food(self):
+    for cell in self.grid:
+      if not self.grid[cell]['food'] and randint(0, 100) < 5:
+        self.grid[cell]['food'] = 1
+```
+The World class comes with a built-in <code>step()</code> method, which calls every agent to execute its own <code>step()</code> method. As of now, there is no true parallelism. Actions are performed by one agent at a time in an order that is shuffled at every step of the model's run. Let's add to the <code>step()</code> method a call to our custom <code>regrow_food()</code> method:
+```python
+  def step(self):
+    super().step()
+    self.regrow_food()
+```
+## Creating the GUI
+You can customize a GUI for your models in the way you prefer, but QuAESiT comes with a GUI class based on Tkinter that facilitates quick visualization of agent-based models.
