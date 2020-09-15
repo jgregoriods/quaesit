@@ -63,11 +63,11 @@ from agents.turtle import Turtle
 
 
 class Tutorial(World):
-  def __init__(self, population, width=50, height=50, tracking=None):
+  def __init__(self, population=50, width=50, height=50, tracking=None):
     super().__init__(width, height, tracking)
     self.population = population
 ```
-In the code above, we initialize the grid with 50x50 cells. The parameter tracking will be better explained later. Essentially, it specifies which properties of the agents or the grid will be saved at each step. The model's world, by default, is toroidal - it wraps vertically and horizontally. If you wish otherwise, you can specify <code>torus=False</code>. We are giving the world an extra property: the initial population of turtles to be created.
+In the code above, we initialize the grid with 50x50 cells. The parameter tracking will be better explained later. Essentially, it specifies which properties of the agents or the grid will be saved at each step. The model's world, by default, is toroidal - it wraps vertically and horizontally. If you wish otherwise, you can specify <code>torus=False</code>. We are giving the world an extra property: the initial population of turtles to be created. For now, let's give this parameter a default of 50.
 Notice that we import the Turtle module from a subfolder. Although you can organize your files in the manner you find most convenient, here I suggest the following structure:
 ```
 tutorial
@@ -110,4 +110,24 @@ The World class comes with a built-in <code>step()</code> method, which calls ev
     self.regrow_food()
 ```
 ## Creating the GUI
-You can customize a GUI for your models in the way you prefer, but QuAESiT comes with a GUI class based on Tkinter that facilitates quick visualization of agent-based models.
+You can customize a GUI for your models in the way you prefer, but QuAESiT comes with a GUI class based on Tkinter that facilitates quick visualization of agent-based models. This is the code we should write in the app.py file:
+```python
+import tkinter as tk
+
+from quaesit import GUI
+
+from world.tutorial import Tutorial
+
+
+def main():
+  root = tk.Tk()
+  app= GUI(root, Tutorial, grid_color='BrBG')
+
+
+if __name__ == '__main__':
+  main()
+```
+The only argument we must pass to GUI is our model class - in this case, Tutorial. In the example above, we are also modifying the colors of the grid. We had chosen to display the layer "food", which has values of 0 or 1. Using the matplotlib colormap "BrBG" will result in brown for 0 and green for 1, which is appropriate for our model. If no colormap is specified, the GUI will display viridis by default.
+```
+python3 Tutorial/app.py
+```
