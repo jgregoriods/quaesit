@@ -4,3 +4,4 @@ dist
 quaesit.egg-info
 .vscode
 .idea
+venv
