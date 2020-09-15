@@ -132,3 +132,5 @@ The only argument we must pass to GUI is our model class - in this case, Tutoria
 python3 Tutorial/app.py
 ```
 <img src="img/fig1.png" height=250>
+Before running the model, we set it up by clicking <code>setup</code>. For visualizing a single step of the model, we click <code>step</code>. If we want to keep the model running, we click <code>run</code>. Because visualization may slow the execution of the model down, we can define a number of steps to run before the model is displayed by filling in the desired number of steps and clicking <code>iterate</code>.
+<img src="img/fig2.gif" height=250>
