@@ -14,10 +14,10 @@ class GUI:
     model.
     """
 
-    def __init__(self, master, model, controls: Dict, plots: List = None,
+    def __init__(self, master, model, controls: Dict = None, plots: List = None,
                  grid_keys: Dict = None, grid_color = 'viridis'):
         self.master = master
-        master.title = model.__name__
+        self.master.title(model.__name__)
         self.model = model
         self.breeds = None
         self.running = True
@@ -77,29 +77,32 @@ class GUI:
                                         command=self.iterate)
         self.iterate_button.grid(row=1, column=7)
 
+        self.controls = controls
+
         self.model_vars = {}
 
-        for control in controls:
-            if controls[control]['type'] == 'scale':
-                self.model_vars[control] = tk.IntVar()
-                label = controls[control]['label']
-                min, max = controls[control]['range']
+        if self.controls is not None:
+            for control in self.controls:
+                if self.controls[control]['type'] == 'scale':
+                    self.model_vars[control] = tk.IntVar()
+                    label = self.controls[control]['label']
+                    min, max = self.controls[control]['range']
 
-                new_slider = tk.Scale(self.master, label=label,
-                                      from_=min, to=max,
-                                      orient=tk.HORIZONTAL,
-                                      variable=self.model_vars[control])
-                new_slider.set(controls[control]['value'])
+                    new_slider = tk.Scale(self.master, label=label,
+                                          from_=min, to=max,
+                                          orient=tk.HORIZONTAL,
+                                          variable=self.model_vars[control])
+                    new_slider.set(self.controls[control]['value'])
 
-                new_slider.grid(row=len(self.model_vars) + 1, column=1)
+                    new_slider.grid(row=len(self.model_vars) + 1, column=1)
 
-            elif controls[control]['type'] == 'check':
-                self.model_vars[control] = tk.BooleanVar()
-                label = controls[control]['label']
+                elif self.controls[control]['type'] == 'check':
+                    self.model_vars[control] = tk.BooleanVar()
+                    label = self.controls[control]['label']
 
-                new_check = tk.Checkbutton(self.master, text=label,
-                                           variable=self.model_vars[control])
-                new_check.grid(row=len(self.model_vars) + 1, column=1)
+                    new_check = tk.Checkbutton(self.master, text=label,
+                                               variable=self.model_vars[control])
+                    new_check.grid(row=len(self.model_vars) + 1, column=1)
 
     def plot_model(self):
         self.ax.cla()

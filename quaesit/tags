@@ -2,9 +2,12 @@
 Agent	/home/jgregoriods/quaesit/quaesit/agent.py	/^class Agent(metaclass=ABCMeta):$/;"	c	language:Python
 agents_here	/home/jgregoriods/quaesit/quaesit/agent.py	/^    def agents_here(self) -> List:$/;"	m	language:Python	class:Agent
 agents_in_radius	/home/jgregoriods/quaesit/quaesit/agent.py	/^    def agents_in_radius(self, radius: int):$/;"	m	language:Python	class:Agent
+backends	/home/jgregoriods/quaesit/quaesit/gui.py	/^import matplotlib.backends.backend_tkagg as tkagg$/;"	i	language:Python
+ceil	/home/jgregoriods/quaesit/quaesit/gui.py	/^from math import ceil$/;"	i	language:Python
 cells_in_radius	/home/jgregoriods/quaesit/quaesit/agent.py	/^    def cells_in_radius(self, radius: int) -> Dict:$/;"	m	language:Python	class:Agent
 cell_here	/home/jgregoriods/quaesit/quaesit/agent.py	/^    def cell_here(self) -> Dict:$/;"	m	language:Python	class:Agent
 colors	/home/jgregoriods/quaesit/quaesit/agent.py	/^    colors = ['blue', 'brown', 'cyan', 'gray', 'green', 'magenta', 'orange',$/;"	v	language:Python	class:Agent
+Dict	/home/jgregoriods/quaesit/quaesit/gui.py	/^from typing import Dict, List$/;"	i	language:Python
 die	/home/jgregoriods/quaesit/quaesit/agent.py	/^    def die(self):$/;"	m	language:Python	class:Agent
 empty_cells_in_radius	/home/jgregoriods/quaesit/quaesit/agent.py	/^    def empty_cells_in_radius(self, radius: int) -> Dict:$/;"	m	language:Python	class:Agent
 face_towards	/home/jgregoriods/quaesit/quaesit/agent.py	/^    def face_towards(self, coords: Tuple):$/;"	m	language:Python	class:Agent
@@ -12,10 +15,17 @@ forward	/home/jgregoriods/quaesit/quaesit/agent.py	/^    def forward(self, n_ste
 get_distance	/home/jgregoriods/quaesit/quaesit/agent.py	/^    def get_distance(self, coords: Tuple) -> int:$/;"	m	language:Python	class:Agent
 GUI	/home/jgregoriods/quaesit/quaesit/gui.py	/^class GUI:$/;"	c	language:Python
 hatch	/home/jgregoriods/quaesit/quaesit/agent.py	/^    def hatch(self):$/;"	m	language:Python	class:Agent
+inspect	/home/jgregoriods/quaesit/quaesit/gui.py	/^import inspect$/;"	i	language:Python
 iterate	/home/jgregoriods/quaesit/quaesit/gui.py	/^    def iterate(self):$/;"	m	language:Python	class:GUI
+List	/home/jgregoriods/quaesit/quaesit/gui.py	/^from typing import Dict, List$/;"	i	language:Python
+matplotlib	/home/jgregoriods/quaesit/quaesit/gui.py	/^import matplotlib.backends.backend_tkagg as tkagg$/;"	i	language:Python
+matplotlib	/home/jgregoriods/quaesit/quaesit/gui.py	/^import matplotlib.figure as mplfig$/;"	i	language:Python
 move_to	/home/jgregoriods/quaesit/quaesit/agent.py	/^    def move_to(self, coords: Tuple):$/;"	m	language:Python	class:Agent
+mplfig	/home/jgregoriods/quaesit/quaesit/gui.py	/^import matplotlib.figure as mplfig$/;"	i	language:Python
 nearest_agent	/home/jgregoriods/quaesit/quaesit/agent.py	/^    def nearest_agent(self, agents: List = None):$/;"	m	language:Python	class:Agent
 nearest_cell	/home/jgregoriods/quaesit/quaesit/agent.py	/^    def nearest_cell(self, cells: Union[List, Dict]) -> Tuple:$/;"	m	language:Python	class:Agent
+np	/home/jgregoriods/quaesit/quaesit/gui.py	/^import numpy as np$/;"	i	language:Python
+on_click	/home/jgregoriods/quaesit/quaesit/gui.py	/^    def on_click(self, event):$/;"	m	language:Python	class:GUI
 plot_model	/home/jgregoriods/quaesit/quaesit/gui.py	/^    def plot_model(self):$/;"	m	language:Python	class:GUI
 random_walk	/home/jgregoriods/quaesit/quaesit/agent.py	/^    def random_walk(self, n_steps: int = 1):$/;"	m	language:Python	class:Agent
 run	/home/jgregoriods/quaesit/quaesit/gui.py	/^    def run(self):$/;"	m	language:Python	class:GUI
@@ -23,8 +33,10 @@ setup	/home/jgregoriods/quaesit/quaesit/gui.py	/^    def setup(self):$/;"	m	lang
 step	/home/jgregoriods/quaesit/quaesit/agent.py	/^    def step(self):$/;"	m	language:Python	class:Agent
 step	/home/jgregoriods/quaesit/quaesit/gui.py	/^    def step(self):$/;"	m	language:Python	class:GUI
 stop	/home/jgregoriods/quaesit/quaesit/gui.py	/^    def stop(self):$/;"	m	language:Python	class:GUI
+tk	/home/jgregoriods/quaesit/quaesit/gui.py	/^import tkinter as tk$/;"	i	language:Python
+tkagg	/home/jgregoriods/quaesit/quaesit/gui.py	/^import matplotlib.backends.backend_tkagg as tkagg$/;"	i	language:Python
 turn_left	/home/jgregoriods/quaesit/quaesit/agent.py	/^    def turn_left(self, angle: int = 90):$/;"	m	language:Python	class:Agent
 turn_right	/home/jgregoriods/quaesit/quaesit/agent.py	/^    def turn_right(self, angle: int = 90):$/;"	m	language:Python	class:Agent
 _id	/home/jgregoriods/quaesit/quaesit/agent.py	/^    _id = 0$/;"	v	language:Python	class:Agent
 __init__	/home/jgregoriods/quaesit/quaesit/agent.py	/^    def __init__(self, world, coords: Tuple = None):$/;"	m	language:Python	class:Agent
-__init__	/home/jgregoriods/quaesit/quaesit/gui.py	/^    def __init__(self, master, model, controls: Dict, plots: List = None,$/;"	m	language:Python	class:GUI
+__init__	/home/jgregoriods/quaesit/quaesit/gui.py	/^    def __init__(self, master, model, controls: Dict = None, plots: List = None,$/;"	m	language:Python	class:GUI
