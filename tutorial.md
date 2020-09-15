@@ -131,6 +131,34 @@ The only argument we must pass to GUI is our model class - in this case, Tutoria
 ```
 python3 Tutorial/app.py
 ```
-<img src="img/fig1.png" height=250>
 Before running the model, we set it up by clicking <code>setup</code>. For visualizing a single step of the model, we click <code>step</code>. If we want to keep the model running, we click <code>run</code>. Because visualization may slow the execution of the model down, we can define a number of steps to run before the model is displayed by filling in the desired number of steps and clicking <code>iterate</code>.
 <img src="img/fig2.gif" height=250>
+To finalize our GUI, we can add controls and plots. Our model starts, by default, with 50 agents, but we can add a slider to control the initial population. We do that by creating a dictionary with the following structure: <code>controls = {var_name: {'type': type, 'label': label, 'range': range, 'value': value}}</code>. The var_name is the argument that will be passed to initialize the model. The type can be 'slider' (for integer variables) or 'check' (for boolean variables). Label can be any string. The range is a tuple with the min and max values of the slider, and the value is the default value to be selected.
+```python
+controls = {
+  'population': {'type': 'scale',
+                 'label': 'Population',
+                 'range': (1, 100),
+                 'value': 50
+  }
+}
+```
+The plots determine the parameters that will be passed to <code>tracking</code> in the model. If the model class is instantiated from the command line, the tracking argument must be a dictionary where each agent breed or grid layer to be tracked is the key and the values are lists of the properties to be tracked. The agent's properties must be preceded by "avg_", "sum_", "min_" or "max_". For example, if we wanted to keep track of the average energy of all turtles, we would pass the following dictionary as the <code>tracking</code> argument of the model: <code>{'turtle': ['avg_energy']}</code>. We can also use 'count' as a property, which will return the total number of agents of that breed in the model. If we want to keep track of the number of grid cells with food in them, we can express it in the following manner: <code>{'grid_food': ['sum']}</code>. This is because the presence of food is translated as 0 or 1, so that by summing the 'food' value of all cells we also obtain the count of cells with food == 1.
+Because we may want to have each property tracked in a different plot in the GUI, the plots argument must be passed as a list of dictionaries with the following structure: <code>{'type': type, 'data': {...}}</code>. The type can be 'line' or 'hist' (for a histogram). The data is a dictionary structured similarly to the tracking argument of the model. In our case, we can show a single plot counting the number of turtles and the number of cells with food:
+```python
+plots = [
+  {'type': 'line',
+  'data': {
+      'turtle': ['count'],
+      'grid_food': ['sum']
+    }
+  }
+]
+
+def main():
+  root = tk.Tk()
+  app = GUI(root, Tutorial, grid_color='BrBG', controls=controls, plots=plots)
+  root.mainloop()
+
+```
+We can now watch the agents move, eat and reproduce while the grid cells regrow food. By watching the plot, we can observe when carrying capacity is reached and the counts of turtles and food achieve an equilibrium.
