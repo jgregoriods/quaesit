@@ -132,7 +132,9 @@ The only argument we must pass to GUI is our model class - in this case, Tutoria
 python3 Tutorial/app.py
 ```
 Before running the model, we set it up by clicking <code>setup</code>. For visualizing a single step of the model, we click <code>step</code>. If we want to keep the model running, we click <code>run</code>. Because visualization may slow the execution of the model down, we can define a number of steps to run before the model is displayed by filling in the desired number of steps and clicking <code>iterate</code>.
-<img src="img/fig2.gif" height=250>
+
+<img src="img/fig2.gif" height=250/>
+
 To finalize our GUI, we can add controls and plots. Our model starts, by default, with 50 agents, but we can add a slider to control the initial population. We do that by creating a dictionary with the following structure: <code>controls = {var_name: {'type': type, 'label': label, 'range': range, 'value': value}}</code>. The var_name is the argument that will be passed to initialize the model. The type can be 'slider' (for integer variables) or 'check' (for boolean variables). Label can be any string. The range is a tuple with the min and max values of the slider, and the value is the default value to be selected.
 ```python
 controls = {
@@ -162,3 +164,5 @@ def main():
 
 ```
 We can now watch the agents move, eat and reproduce while the grid cells regrow food. By watching the plot, we can observe when carrying capacity is reached and the counts of turtles and food achieve an equilibrium.
+
+<img src="img/fig3.gif" height=250/>
