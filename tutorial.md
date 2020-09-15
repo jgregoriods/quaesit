@@ -131,3 +131,4 @@ The only argument we must pass to GUI is our model class - in this case, Tutoria
 ```
 python3 Tutorial/app.py
 ```
+<img src="img/fig1.png" height=250>
